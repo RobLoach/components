@@ -1,0 +1,26 @@
+{
+    "name": "robloach/components",
+    "type": "composer-installer",
+    "license": "MIT",
+    "description": "Allows installation of CSS and JavaScript components using Composer.",
+    "keywords": [
+        "installer"
+    ],
+    "authors": [
+        {
+            "name": "Rob Loach",
+            "email": "robloach@gmail.com",
+            "homepage": "http://robloach.net"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Components\\": "src/" }
+    },
+    "extra": {
+        "class": "Components\\Installer"
+    },
+    "require-dev": {
+        "composer/composer": "1.0.*@dev",
+        "phpunit/phpunit": "*"
+    }
+}
