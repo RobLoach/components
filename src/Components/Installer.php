@@ -24,7 +24,7 @@ class Installer extends LibraryInstaller
         $base = 'components';
         if ($this->composer->getPackage()) {
             $extra = $this->composer->getPackage()->getExtra();
-            if (isset($extra['components']['path']) {
+            if (isset($extra['components']['path'])) {
                 $base = $extra['components']['path'];
             }
         }
