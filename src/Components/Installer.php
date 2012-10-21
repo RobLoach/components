@@ -30,18 +30,23 @@ class Installer extends LibraryInstaller
             $name = $prettyName;
         }
 
-        // Allow switching the base components installation directory.
-        $base = 'components';
+        // Allow switching the component destination installation directory.
+        $dest = 'components';
         if ($this->composer->getPackage()) {
             $extra = $this->composer->getPackage()->getExtra();
             if (isset($extra['components']['install-path'])) {
-                $base = $extra['components']['install-path'];
+                $dest = $extra['components']['install-path'];
             }
         }
 
-        // Copy require.js to the base directory.
+        // Make sure the destination directory exists.
+        if (!is_dir($dest)) {
+            mkdir($dest, 0777, TRUE);
+        }
+
+        // Copy over require.js.
         $source = __DIR__.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'require.js';
-        copy($source, $base.DIRECTORY_SEPARATOR.'require.js');
+        copy($source, $dest.DIRECTORY_SEPARATOR.'require.js');
 
         // Write the new require.config.js with the new package information.
         $extra = $this->composer->getPackage()->getExtra();
@@ -49,7 +54,7 @@ class Installer extends LibraryInstaller
         $requirepackage = $this->requireJsPackage($package, $name);
         $packages[] = $requirepackage;
         $javascript = $this->requireJsConfig($packages);
-        file_put_contents($base.DIRECTORY_SEPARATOR.'require.config.js', $javascript);
+        file_put_contents($dest.DIRECTORY_SEPARATOR.'require.config.js', $javascript);
 
         // Re-save the array of Component packages for addition later on.
         $extra['component-packages'][] = $requirepackage;
@@ -58,7 +63,7 @@ class Installer extends LibraryInstaller
         //$this->composer->getPackage()->setExtra($extra);
 
         // Instruct to install into the base directory.
-        return $base.DIRECTORY_SEPARATOR.$name;
+        return $dest.DIRECTORY_SEPARATOR.$name;
     }
 
     /**
