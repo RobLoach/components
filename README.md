@@ -7,7 +7,7 @@ your composer.json file are `"type": "component"` which describes what your
 package is and `"require": { "robloach/components": "*" }` which tells Composer
 to load the custom installers.
 
-``` json
+```json
 {
     "name": "my/jquery",
     "type": "component",
@@ -16,7 +16,8 @@ to load the custom installers.
     },
     "extra": {
         "components": {
-            "js": "jquery.js"
+            "name": "jquery",
+            "main": "jquery.js"
         }
     }
 }
