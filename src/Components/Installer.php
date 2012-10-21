@@ -86,21 +86,31 @@ class Installer extends LibraryInstaller
 
     /**
      * From a set of RequireJS packages, construct the JavaScript config.
+     *
+     * @param array $packages
+     *     An array of RequireJS definitions.
      */
     protected function requireJsConfig(array $packages) {
+        // Retrieve the Components configuration.
+        $extra = $this->composer->getPackage()->getExtra();
+        $extra = isset($extra['components']) ? $extra['components'] : array();
+
         // Create the components RequireJS definition.
         $components['packages'] = $packages;
         $components['version'] = Installer::VERSION;
+        if (isset($extra['base-url'])) {
+            $components['baseUrl'] = $extra['base-url'];
+        }
         $json = json_encode($components);
 
         // Construct the JavaScript output.
         $output = <<<EOT
 var components = $json;
 if (typeof require !== "undefined" && require.config) {
-    require.config({packages: components.packages});
+    require.config(components);
 }
 else {
-    var require = {packages: components.packages};
+    var require = components;
 }
 if (typeof exports !== "undefined" && typeof module !== "undefined") {
     module.exports = components;
